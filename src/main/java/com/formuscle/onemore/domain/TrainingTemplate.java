@@ -22,4 +22,16 @@ public class TrainingTemplate {
 
     @OneToMany(mappedBy = "trainingTemplate")
     private List<ExerciseSet> exerciseSets = new ArrayList<>();
+
+    //연관 관계 메서드
+    public void setMember(Member member){
+        this.member = member;
+        member.getTrainingTemplates().add(this);
+    }
+
+    public void addExerciseSet(ExerciseSet exerciseSet){
+        exerciseSets.add(exerciseSet);
+        exerciseSet.setTrainingTemplate(this);
+    }
+
 }
