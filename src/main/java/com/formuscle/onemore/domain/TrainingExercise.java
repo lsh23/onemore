@@ -21,10 +21,4 @@ public class TrainingExercise {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "muscle_target_id")
     private MuscleTarget muscleTarget;
-
-    @OneToOne(mappedBy = "trainingExercise")
-    private ExerciseSet exerciseSet;
-
-    @OneToOne(mappedBy = "trainingExercise")
-    private History history;
 }

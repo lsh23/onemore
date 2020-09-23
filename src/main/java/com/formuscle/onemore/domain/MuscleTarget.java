@@ -23,7 +23,4 @@ public class MuscleTarget {
         trainingExercises.add(trainingExercise);
         trainingExercise.setMuscleTarget(this);
     }
-
-    @OneToOne(mappedBy = "muscleTarget")
-    private History history;
 }
