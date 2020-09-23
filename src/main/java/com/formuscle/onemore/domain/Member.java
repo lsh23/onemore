@@ -18,4 +18,7 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<TrainingTemplate> trainingTemplates = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<History> histories = new ArrayList<>();
 }

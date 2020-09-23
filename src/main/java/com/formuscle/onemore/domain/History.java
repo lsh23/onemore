@@ -21,6 +21,15 @@ public class History {
     @JoinColumn(name = "muscle_target_id")
     private MuscleTarget muscleTarget;
 
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    public void setMember(Member member){
+        member.getHistories().add(this);
+        this.setMember(member);
+    }
+
     private Float weight;
     private Integer times;
     private Boolean success;
