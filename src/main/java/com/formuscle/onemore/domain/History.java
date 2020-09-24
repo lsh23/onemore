@@ -27,7 +27,7 @@ public class History {
 
     public void setMember(Member member){
         member.getHistories().add(this);
-        this.setMember(member);
+        this.member = member;
     }
 
     private Float weight;
