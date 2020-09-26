@@ -33,4 +33,10 @@ public class MuscleTargetController {
         muscleTargetService.join(muscleTarget);
         return "redirect:/home";
     }
+
+    @GetMapping("/targets")
+    public String list(Model model){
+        model.addAttribute("targets",muscleTargetService.findMuscleTargets());
+        return "targets/targetList";
+    }
 }
