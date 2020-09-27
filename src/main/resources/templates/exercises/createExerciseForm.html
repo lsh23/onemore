@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    <form role="form" action="/exercises/new" method="post">
+        <div class="form-group">
+            <label for="target">운동부위</label>
+            <select name="targetId" id="target" class="form-control">
+                <option value="">운동부위 선택</option>
+                <option th:each="target : ${targets}"
+                        th:value="${target.id}"
+                        th:text="${target.muscleTargetName}" />
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="exerciseName">운동이름</label>
+            <input type="text" name="exerciseName" class="form-control" id="exerciseName"
+                   placeholder="운동 이름을 입력하세요">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <br/>
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+</body>
+</html>

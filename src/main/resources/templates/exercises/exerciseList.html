@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>부위 명칭</th>
+                <th>운동 명칭</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="exercise : ${exercises}">
+                <td th:text="${exercise.id}"></td>
+                <td th:text="${exercise.muscleTarget.muscleTargetName}"></td>
+                <td th:text="${exercise.trainingExerciseName}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+</body>
+</html>
