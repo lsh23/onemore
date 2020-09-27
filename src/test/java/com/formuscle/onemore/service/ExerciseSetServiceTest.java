@@ -30,7 +30,7 @@ public class ExerciseSetServiceTest {
     MemberService memberService;
 
     @Test
-    @Rollback(false)
+//    @Rollback(false)
     public void 운동세트_저장() throws Exception {
         // Given
         Member member = new Member();
@@ -65,7 +65,7 @@ public class ExerciseSetServiceTest {
     }
 
     @Test
-    @Rollback(false)
+//    @Rollback(false)
     public void 운동세트_템플릿ID로_조회() throws Exception {
         // Given
         Member member = new Member();
@@ -116,7 +116,7 @@ public class ExerciseSetServiceTest {
     }
 
     @Test
-    @Rollback(false)
+//    @Rollback(false)
     public void 운동세트_수정() throws Exception {
         // Given
         Member member = new Member();
