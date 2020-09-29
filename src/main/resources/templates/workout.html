@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <title>Hello</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+        <h2>Work Out</h2>
+        <button type="button" class="btn btn-lg btn-success" data-toggle="modal" data-target="#addSetModal">
+            세트 추가
+        </button>
+        <p class="lead">현재 운동</p>
+            <table id="settable" class="table table-striped">
+                <thead>
+                <tr>
+                    <th>운동 명칭</th>
+                    <th>운동 부위</th>
+                    <th>운동 횟수</th>
+                    <th>운동 무게</th>
+                    <th>기록 하기</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="set : ${sets}">
+                    <td th:text="${set.trainingExercise.trainingExerciseName}"></td>
+                    <td th:text="${set.trainingExercise.muscleTarget.muscleTargetName}"></td>
+                    <td>
+                        <input type="text" name="setTimes" class="form-control" id="setTimes" placeholder="횟수">
+                    </td>
+                    <td>
+                        <input type="text" name="setWeight" class="form-control" id="setWeight" placeholder="무게(Kg)">
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-sm btn-success">기록</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        <p class="lead">템플릿 관리</p>
+        <p>
+            <a class="btn btn-info" href="">운동 템플릿 불러오기</a>
+            <a class="btn btn-info" href="">운동 템플릿 저장</a>
+    </p>
+        <!-- Modal -->
+        <div class="modal fade" id="addSetModal" tabindex="-1" aria-labelledby="addSetModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addSetModalLabel">세트 추가</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                            <label for="exercise">운동</label>
+                            <select name="exerciseId" id="exercise" class="form-control">
+                                <option value="">운동선택</option>
+                                <option th:each="exercise : ${exercises}"
+                                        th:value="${exercise.id}"
+                                        th:text="${exercise.trainingExerciseName}" />
+                            </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="addExercise()">추가</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+<script>
+    let sets = [];
+
+    function addExercise(){
+        $('#addSetModal').modal('hide')
+        $.ajax({
+            method: "GET",
+            url: "api/exercise/"+ $("#exercise option:selected").val()
+        })
+            .done(function(response) {
+                console.log(response.exerciseName);
+                console.log(response.targetName);
+                let set = [$("#exercise option:selected").val(),response.exerciseName,response.targetName]
+                $("#exercise").val("")
+                sets.push(set);
+                console.log(sets)
+                $('#settable > tbody:last').append('' +
+                    '                <tr>\n' +
+                    '                    <td>' + response.exerciseName + '</td>\n' +
+                    '                    <td>' + response.targetName + '</td>\n' +
+                    '                    <td>\n' +
+                    '                        <input type="text" name="setTimes" class="form-control" id="setTimes" placeholder="횟수">\n' +
+                    '                    </td>\n' +
+                    '                    <td>\n' +
+                    '                        <input type="text" name="setWeight" class="form-control" id="setWeight" placeholder="무게(Kg)">\n' +
+                    '                    </td>\n' +
+                    '                    <td>\n' +
+                    '                        <button type="submit" class="btn btn-sm btn-success">기록</button>\n' +
+                    '                    </td>\n' +
+                    '                </tr>');
+            });
+    }
+
+</script>
+</body>
+</html>
