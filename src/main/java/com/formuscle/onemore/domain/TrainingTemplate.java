@@ -8,10 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@SequenceGenerator(
+        name= "TEMPLATE_SEQ_GENERATOR",
+        sequenceName = "TEMPLATE_SEQ",
+        initialValue = 1, allocationSize = 1
+)
 @Getter @Setter
 public class TrainingTemplate {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "TEMPLATE_SEQ_GENERATOR")
     @Column(name = "training_template_id")
     private Long id;
     private String trainingTemplateName;

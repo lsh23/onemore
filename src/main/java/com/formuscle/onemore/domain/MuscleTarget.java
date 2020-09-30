@@ -8,10 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@SequenceGenerator(
+        name= "TARGET_SEQ_GENERATOR",
+        sequenceName = "TARGET_SEQ",
+        initialValue = 1, allocationSize = 1
+)
 @Getter @Setter
 public class MuscleTarget {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "TARGET_SEQ_GENERATOR")
     @Column(name = "muscle_target_id")
     private Long id;
     private String muscleTargetName;

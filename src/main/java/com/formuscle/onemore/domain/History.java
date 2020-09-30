@@ -7,10 +7,16 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@SequenceGenerator(
+        name= "HISTORY_SEQ_GENERATOR",
+        sequenceName = "HISTORY_SEQ",
+        initialValue = 1, allocationSize = 1
+)
 @Getter @Setter
 public class History {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "HISTORY_SEQ_GENERATOR")
     private Long id;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
