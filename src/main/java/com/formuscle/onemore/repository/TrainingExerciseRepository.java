@@ -24,10 +24,10 @@ public class TrainingExerciseRepository {
                 .getResultList();
     }
 
-    public List<TrainingExercise> findByName(String name) {
+    public TrainingExercise findOneByName(String name) {
         return em.createQuery("select t from TrainingExercise t where t.trainingExerciseName =: name",TrainingExercise.class)
                 .setParameter("name",name)
-                .getResultList();
+                .getSingleResult();
     }
 
     public List<TrainingExercise> findAllByTarget(Long targetId) {
@@ -39,6 +39,5 @@ public class TrainingExerciseRepository {
     public TrainingExercise findOne(Long id){
         return em.find(TrainingExercise.class,id);
     }
-
 
 }

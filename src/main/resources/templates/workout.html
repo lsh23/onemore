@@ -40,8 +40,8 @@
             </table>
         <p class="lead">템플릿 관리</p>
         <p>
-            <a class="btn btn-info" href="">운동 템플릿 불러오기</a>
-            <a class="btn btn-info" href="">운동 템플릿 저장</a>
+            <a class="btn btn-info">운동 템플릿 불러오기</a>
+            <a class="btn btn-info" data-toggle="modal" data-target="#saveTemplateModal">운동 템플릿 저장</a>
     </p>
         <!-- Modal -->
         <div class="modal fade" id="addSetModal" tabindex="-1" aria-labelledby="addSetModalLabel" aria-hidden="true">
@@ -64,6 +64,25 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" onclick="addExercise()">추가</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="saveTemplateModal" tabindex="-1" aria-labelledby="saveTemplateModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="saveTemplateModalLabel">템플릿 저장</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" name="setTemplateName" class="form-control" id="setTemplateName" placeholder="템플릿 이름을 입력하세요.(ex:등/가슴_1)">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="saveTemplate()">저장</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
                     </div>
                 </div>
@@ -103,6 +122,40 @@
                     '                </tr>');
             });
     }
+
+    function saveTemplate(){
+        // tr에 쌓여 있는 운동 모아서 api 쏘면 됨
+        $('#saveTemplateModal').modal('hide')
+        var templateName = $('#setTemplateName').val();
+
+        var dataMap = {
+            templateName : templateName,
+            exerciseNames : [],
+            targetNames : []
+        }
+
+        var setTable = $("#settable tbody tr");
+        setTable.each(function(i){
+            var exerciseName = setTable.eq(i).children().eq(0).text();
+            var targetName = setTable.eq(i).children().eq(1).text();
+            dataMap.exerciseNames.push(exerciseName);
+            dataMap.targetNames.push(targetName);
+        })
+
+        console.log(JSON.stringify(dataMap))
+
+        $.ajax({
+            url: "/api/templates/new",
+            contentType: "application/json",
+            method: "POST",
+            data : JSON.stringify(dataMap)
+        })
+            .done(function(response) {
+                console.log(response);
+            });
+
+    }
+
 
 </script>
 </body>

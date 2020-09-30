@@ -34,4 +34,7 @@ public class TrainingExerciseService {
         return trainingExerciseRepository.findOne(trainingExerciseId);
     }
 
+    public TrainingExercise findOneByName(String trainingExerciseName){
+        return trainingExerciseRepository.findOneByName(trainingExerciseName);
+    }
 }
