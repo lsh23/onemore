@@ -40,10 +40,33 @@
             </table>
         <p class="lead">템플릿 관리</p>
         <p>
-            <a class="btn btn-info">운동 템플릿 불러오기</a>
+            <a class="btn btn-info" data-toggle="modal" data-target="#selectTemplateModal" onclick="selectTemplate()">운동 템플릿 불러오기</a>
             <a class="btn btn-info" data-toggle="modal" data-target="#saveTemplateModal">운동 템플릿 저장</a>
     </p>
         <!-- Modal -->
+        <div class="modal fade" id="selectTemplateModal" tabindex="-1" aria-labelledby="selectTemplateModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="selectTemplateModalLabel">운동 템플릿 선택</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="templates">운동</label>
+                        <select name="templateId" id="templates" class="form-control">
+                            <option value="">템플릿선택</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="loadTemplate()">불러오기</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="modal fade" id="addSetModal" tabindex="-1" aria-labelledby="addSetModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -156,6 +179,59 @@
 
     }
 
+    function selectTemplate() {
+        $.ajax({
+            method: "GET",
+            url: "api/templates"
+        })
+            .done(function(response) {
+                console.log(response)
+                $.each(response,function (index,item) {
+                    var option = $("<option>"+item.templateName+"</option>");
+                    $('#templates').append(option);
+                    }
+                )
+            });
+    }
+
+    function loadTemplate() {
+
+        var templateName = $("#templates option:selected").val();
+
+        $("#templates").empty();
+        var init_option = $("<option value=''>"+"템플릿선택"+"</option>");
+        $('#templates').append(init_option);
+        $("#templates").val('');
+        console.log("api/templates/"+ encodeURI(encodeURIComponent(templateName)))
+
+        $('#selectTemplateModal').modal('hide')
+        $.ajax({
+            method: "GET",
+            url: "api/templates/"+ encodeURI(encodeURIComponent(templateName))
+        })
+            .done(function(response) {
+                console.log(response);
+                $('#settable > tbody:last').empty();
+                $.each(response,function (index,item) {
+                    $('#settable > tbody:last').append('' +
+                        '                <tr>\n' +
+                        '                    <td>' + item.exerciseName + '</td>\n' +
+                        '                    <td>' + item.targetName + '</td>\n' +
+                        '                    <td>\n' +
+                        '                        <input type="text" name="setTimes" class="form-control" id="setTimes" placeholder="횟수">\n' +
+                        '                    </td>\n' +
+                        '                    <td>\n' +
+                        '                        <input type="text" name="setWeight" class="form-control" id="setWeight" placeholder="무게(Kg)">\n' +
+                        '                    </td>\n' +
+                        '                    <td>\n' +
+                        '                        <button type="submit" class="btn btn-sm btn-success">기록</button>\n' +
+                        '                    </td>\n' +
+                        '                </tr>');
+                })
+            });
+
+
+    }
 
 </script>
 </body>

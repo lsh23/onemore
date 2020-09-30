@@ -10,13 +10,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -51,6 +51,31 @@ public class TrainingTemplateApiController {
         return new CreateTemplateResponse(request.templateName,exerciseDtoList);
     }
 
+    @GetMapping("/api/templates")
+    public List<TemplateDto> allTemplates(){
+
+        List<TrainingTemplate> trainingTemplates = trainingTemplateService.findTrainingTemplates();
+        List<TemplateDto> templateDtoList = trainingTemplates.stream()
+                .map(trainingTemplate -> new TemplateDto(trainingTemplate.getTrainingTemplateName()))
+                .collect(Collectors.toList());
+
+        return templateDtoList;
+    }
+
+    @GetMapping("/api/templates/{templateName}")
+    public List<ExerciseDto> exercisesOfTemplate(@PathVariable("templateName") String name) throws UnsupportedEncodingException {
+
+        name = java.net.URLDecoder.decode(name,"UTF-8");
+        TrainingTemplate trainingTemplate = trainingTemplateService.findOneByName(name);
+        List<ExerciseSet> exerciseSets = trainingTemplate.getExerciseSets();
+        List<ExerciseDto> exerciseDtoList = exerciseSets.stream()
+                .map(exerciseSet -> new ExerciseDto(exerciseSet.getTrainingExercise().getTrainingExerciseName(),
+                                                    exerciseSet.getTrainingExercise().getMuscleTarget().getMuscleTargetName()))
+                .collect(Collectors.toList());
+
+        return exerciseDtoList;
+    }
+
     @Data
     @AllArgsConstructor
     static class CreateTemplateResponse {
@@ -71,5 +96,11 @@ public class TrainingTemplateApiController {
     static class ExerciseDto{
         private String exerciseName;
         private String targetName;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class TemplateDto {
+        private String templateName;
     }
 }

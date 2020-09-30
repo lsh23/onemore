@@ -33,5 +33,9 @@ public class TrainingTemplateRepository {
         return em.find(TrainingTemplate.class,trainingTemplateId);
     }
 
-
+    public TrainingTemplate findOneByName(String trainingTemplateName) {
+        return em.createQuery("select t from TrainingTemplate t where t.trainingTemplateName=:trainingTemplateName",TrainingTemplate.class)
+                .setParameter("trainingTemplateName",trainingTemplateName)
+                .getSingleResult();
+    }
 }

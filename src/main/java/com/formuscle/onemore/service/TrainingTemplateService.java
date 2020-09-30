@@ -34,6 +34,9 @@ public class TrainingTemplateService {
         return trainingTemplateRepository.findOne(trainingTemplateId);
     }
 
+    public TrainingTemplate findOneByName(String trainingTemplateName){
+        return trainingTemplateRepository.findOneByName(trainingTemplateName);
+    }
 
 
 
