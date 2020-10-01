@@ -51,6 +51,21 @@ public class HistoryApiController {
         return new HistoryDto(trainingExercise.getTrainingExerciseName(), weight, now);
     }
 
+    @GetMapping("/api/histories")
+    public List<HistoryDto> allHistories(){
+
+        List<History> histories = historyService.findHistories();
+        List<HistoryDto> historyDtoList = histories.stream()
+                .map(history -> new HistoryDto(history.getTrainingExercise().getTrainingExerciseName(),
+                                               history.getWeight(),
+                                               history.getLocalDateTime()))
+                .collect(Collectors.toList());
+
+        return historyDtoList;
+    }
+
+
+
     @Data
     @AllArgsConstructor
     static class HistoryDto {
