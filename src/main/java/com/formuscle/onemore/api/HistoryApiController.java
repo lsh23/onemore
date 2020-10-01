@@ -10,12 +10,15 @@ import com.formuscle.onemore.service.TrainingExerciseService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,13 +38,17 @@ public class HistoryApiController {
 
         history.setTrainingExercise(trainingExercise);
         history.setMuscleTarget(muscleTarget);
-        history.setWeight(Float.valueOf(request.weight));
+
+        Float weight = Float.valueOf(request.weight);
+        LocalDateTime now = LocalDateTime.now();
+
+        history.setWeight(weight);
         history.setTimes(Integer.valueOf(request.setTimes));
-        history.setLocalDateTime(LocalDateTime.now());
+        history.setLocalDateTime(now);
 
         historyService.save(history);
 
-        return new HistoryDto(trainingExercise.getTrainingExerciseName(),Float.valueOf(request.weight));
+        return new HistoryDto(trainingExercise.getTrainingExerciseName(), weight, now);
     }
 
     @Data
@@ -49,6 +56,7 @@ public class HistoryApiController {
     static class HistoryDto {
         String exerciseName;
         Float weight;
+        LocalDateTime localDateTime;
     }
 
     @Data
