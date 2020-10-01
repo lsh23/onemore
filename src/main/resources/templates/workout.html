@@ -27,13 +27,13 @@
                     <td th:text="${set.trainingExercise.trainingExerciseName}"></td>
                     <td th:text="${set.trainingExercise.muscleTarget.muscleTargetName}"></td>
                     <td>
-                        <input type="text" name="setTimes" class="form-control" id="setTimes" placeholder="횟수">
+                        <input type="number" min="1" name="setTimes" class="form-control" id="setTimes" placeholder="횟수">
                     </td>
                     <td>
-                        <input type="text" name="setWeight" class="form-control" id="setWeight" placeholder="무게(Kg)">
+                        <input type="number" min="1" step="0.5" name="setWeight" class="form-control" id="setWeight" placeholder="무게(Kg)">
                     </td>
                     <td>
-                        <button type="submit" class="btn btn-sm btn-success">기록</button>
+                        <button type="submit" class="btn btn-sm btn-success" onclick="saveHistory(this)">기록</button>
                     </td>
                 </tr>
                 </tbody>
@@ -134,13 +134,13 @@
                     '                    <td>' + response.exerciseName + '</td>\n' +
                     '                    <td>' + response.targetName + '</td>\n' +
                     '                    <td>\n' +
-                    '                        <input type="text" name="setTimes" class="form-control" id="setTimes" placeholder="횟수">\n' +
+                    '                        <input type="number" min="1" name="setTimes" class="form-control" id="setTimes" placeholder="횟수">\n' +
                     '                    </td>\n' +
                     '                    <td>\n' +
-                    '                        <input type="text" name="setWeight" class="form-control" id="setWeight" placeholder="무게(Kg)">\n' +
+                    '                        <input type="number" min="1" step="0.5" name="setWeight" class="form-control" id="setWeight" placeholder="무게(Kg)">\n' +
                     '                    </td>\n' +
                     '                    <td>\n' +
-                    '                        <button type="submit" class="btn btn-sm btn-success">기록</button>\n' +
+                    '                        <button type="submit" class="btn btn-sm btn-success" onclick="saveHistory(this)">기록</button>\n' +
                     '                    </td>\n' +
                     '                </tr>');
             });
@@ -218,18 +218,53 @@
                         '                    <td>' + item.exerciseName + '</td>\n' +
                         '                    <td>' + item.targetName + '</td>\n' +
                         '                    <td>\n' +
-                        '                        <input type="text" name="setTimes" class="form-control" id="setTimes" placeholder="횟수">\n' +
+                        '                        <input type="number" min="0" name="setTimes" class="form-control" id="setTimes" placeholder="횟수">\n' +
                         '                    </td>\n' +
                         '                    <td>\n' +
-                        '                        <input type="text" name="setWeight" class="form-control" id="setWeight" placeholder="무게(Kg)">\n' +
+                        '                        <input type="number" min="0" step="0.5" name="setWeight" class="form-control" id="setWeight" placeholder="무게(Kg)">\n' +
                         '                    </td>\n' +
                         '                    <td>\n' +
-                        '                        <button type="submit" class="btn btn-sm btn-success">기록</button>\n' +
+                        '                        <button type="submit" class="btn btn-sm btn-success" onclick="saveHistory(this)">기록</button>\n' +
                         '                    </td>\n' +
                         '                </tr>');
                 })
             });
 
+
+    }
+
+
+    function saveHistory(button) {
+        // console.log(button.parentElement.parentElement)
+        var tr = button.parentElement.parentElement
+        button.disabled = true
+        tr.children[3].children[0].disabled = true
+        tr.children[2].children[0].disabled = true
+        console.log(tr.children[0].textContent)
+        console.log(tr.children[1].textContent)
+        console.log(tr.children[2].children[0].value)
+        console.log(tr.children[3].children[0].value)
+        var exerciseName = tr.children[0].textContent
+        var weight = tr.children[3].children[0].value
+        var setTimes = tr.children[2].children[0].value
+
+        var dataMap = {
+            exerciseName : exerciseName,
+            weight : weight,
+            setTimes : setTimes
+        }
+
+        console.log(JSON.stringify(dataMap))
+
+        $.ajax({
+            url: "/api/history/new",
+            contentType: "application/json",
+            method: "POST",
+            data : JSON.stringify(dataMap)
+        })
+            .done(function(response) {
+                console.log(response);
+            });
 
     }
 

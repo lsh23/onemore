@@ -40,4 +40,6 @@ public class MuscleTargetService {
         return muscleTargetRepository.findOne(muscleTargetId);
     }
 
+    public MuscleTarget findOneByName(String muscleTargetName){return muscleTargetRepository.findByName(muscleTargetName).get(0);}
+
 }
