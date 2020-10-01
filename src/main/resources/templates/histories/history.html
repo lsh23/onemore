@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+    <div>
+        <div class="form-group">
+            <label for="target">운동선택</label>
+            <select name="targetId" id="target" class="form-control">
+                <option value="">운동선택</option>
+                <option th:each="exercise : ${exercises}"
+                        th:value="${exercise.id}"
+                        th:text="${exercise.trainingExerciseName}"/>
+            </select>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>날짜</th>
+                <th>운동</th>
+                <th>무게</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+</body>
+</html>
