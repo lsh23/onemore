@@ -83,7 +83,20 @@ public class HistoryApiControllerTest {
                 .andExpect(jsonPath("$[0].weight",is(65.0)));
     }
 
-    private void setUpForGetTest() {
+    @Test
+    @Transactional
+    public void 모든_기록_ID로_조회() throws Exception{
+        //given
+        Long exerciseId = setUpForGetTest();
+
+        this.mockMvc.perform(get("/api/histories/"+exerciseId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(5)))
+                .andExpect(jsonPath("$[0].exerciseName",is("벤치프레스")))
+                .andExpect(jsonPath("$[0].weight",is(65.0)));
+    }
+
+    private Long setUpForGetTest() {
 
         MuscleTarget muscleTarget = new MuscleTarget();
         muscleTarget.setMuscleTargetName("가슴");
@@ -102,6 +115,8 @@ public class HistoryApiControllerTest {
             history.setWeight(65.0f);
             historyService.save(history);
         }
+        
+        return trainingExercise.getId();
 
     }
 
