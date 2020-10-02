@@ -6,28 +6,82 @@
     <div th:replace="fragments/bodyHeader :: bodyHeader" />
     <div>
         <div class="form-group">
-            <label for="target">운동선택</label>
-            <select name="targetId" id="target" class="form-control">
+            <label for="exercise">운동선택</label>
+            <select name="exerciseId" id="exercise" class="form-control" onchange="loadHistories()">
                 <option value="">운동선택</option>
                 <option th:each="exercise : ${exercises}"
                         th:value="${exercise.id}"
                         th:text="${exercise.trainingExerciseName}"/>
             </select>
         </div>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>날짜</th>
-                <th>운동</th>
-                <th>무게</th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
     </div>
+    <canvas id="myChart" width="300" height="250"></canvas>
     <div th:replace="fragments/footer :: footer" />
 </div> <!-- /container -->
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.css"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+<script>
+    function getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min; //최댓값도 포함, 최솟값도 포함
+    }
+    function loadHistories() {
+        var exerciseId = $("#exercise option:selected").val();
+
+        $.ajax({
+            method: "GET",
+            url: "api/histories/"+ exerciseId
+        })
+            .done(function(response) {
+                console.log(response)
+                var data = new Array()
+                $.each(response,function (index,item){
+                    data.push(
+                        {
+                            x:new Date(response[index].localDateTime),
+                            y:response[index].weight
+                        }
+                    )
+                })
+                console.log(data)
+                var r = getRandomIntInclusive(0,255)
+                var g = getRandomIntInclusive(0,255)
+                var b = getRandomIntInclusive(0,255)
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        datasets: [{
+                            label: response[0].exerciseName,
+                            data: data,
+                            backgroundColor: 'rgba('+r+', '+b+', '+g+', 0.2)',
+                            borderColor: 'rgba('+r+', '+b+', '+g+', 1)'
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            xAxes: [{
+                                type: 'time',
+                                time: {
+                                    unit: 'day'
+                                },
+                                distribution: 'series'
+                            }],
+                            yAxes: [{
+                                ticks: {
+                                    suggestedMin: 0
+                                }
+                            }]
+                        }
+                    }
+                });
+            });
+
+
+
+    }
+</script>
 </html>

@@ -10,10 +10,7 @@ import com.formuscle.onemore.service.TrainingExerciseService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -64,6 +61,18 @@ public class HistoryApiController {
         return historyDtoList;
     }
 
+    @GetMapping("/api/histories/{exerciseId}")
+    public List<HistoryDto> allHistoriesByExerciseId(@PathVariable("exerciseId") Long id){
+
+        List<History> histories = historyService.findHistoriesByExercise(id);
+        List<HistoryDto> historyDtoList = histories.stream()
+                .map(history -> new HistoryDto(history.getTrainingExercise().getTrainingExerciseName(),
+                        history.getWeight(),
+                        history.getLocalDateTime()))
+                .collect(Collectors.toList());
+
+        return historyDtoList;
+    }
 
 
     @Data
