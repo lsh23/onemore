@@ -21,6 +21,8 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
     private String username;
+    private String userMail;
+    private String password;
 
     @OneToMany(mappedBy = "member")
     private List<TrainingTemplate> trainingTemplates = new ArrayList<>();
