@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    <form role="form">
+        <div class="form-group">
+            <label for="email"><b>Email</b></label>
+            <input type="email" placeholder="Enter Email" id="email" name="email" class="form-control" required>
+
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" id="psw" name="psw" class="form-control" required>
+
+            <label for="psw-repeat"><b>Repeat Password</b></label>
+            <input type="password" placeholder="Repeat Password" id="psw-repeat" name="psw-repeat" class="form-control" required>
+
+            <label for="name"><b>User Name</b></label>
+            <input type="text" placeholder="name" id="name" name="name" class="form-control" required>
+        </div>
+        <a class="btn btn-danger" href="/">Cancel</a>
+        <button id="join_btn" type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <br/>
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+<script>
+    function clickHandler(e){
+
+        e.preventDefault();
+        const email = document.querySelector('#email').value;
+        const psw = document.querySelector('#psw').value;
+        const psw_repeat = document.querySelector('#psw-repeat').value;
+        const name = document.querySelector('#name').value;
+
+        console.log(psw);
+        console.log(psw_repeat);
+        console.log(psw_repeat == psw);
+        console.log(psw_repeat === psw);
+
+        const body = {
+            "email":email,
+            "psw":psw,
+            "psw_repeat":psw_repeat,
+            "name":name
+        }
+
+        console.log(JSON.stringify(body))
+
+        if(psw===psw_repeat){
+            $.ajax({
+                url: "/api/member/new",
+                contentType: "application/json",
+                method: "POST",
+                data : JSON.stringify(body)
+            })
+                .done(function(response) {
+                    console.log('가입완료');
+                    alert('가입완료');
+                    location.href="/";
+                });
+        }else{
+            console.log('비밀번호가 일치하지 않습니다.');
+            alert('비밀번호가 일치하지 않습니다.');
+        }
+    }
+    const join_btn = document.querySelector('#join_btn');
+    join_btn.addEventListener('click',clickHandler);
+</script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <title>Hello</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+    <div class="jumbotron">
+        <h1>One More</h1>
+        <p class="lead">Log in</p>
+        <div class="form-group">
+            <form action="">
+                <div>
+                    <input type="text" placeholder="ID" id="email"/>
+                </div>
+                <div>
+                    <input type="text" placeholder="Password" id="psw"/>
+                </div>
+                <button id="login_btn" class="btn btn-primary" type="submit">로그인</button>
+                <a class="btn btn-light" href="/signUp">회원가입</a>
+            </form>
+        </div>
+    </div>
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+<script>
+    function clickHandler(e){
+
+        e.preventDefault();
+
+        const email = document.querySelector('#email').value;
+        const psw = document.querySelector('#psw').value;
+
+        console.log(psw);
+
+        const body = {
+            "email":email,
+            "psw":psw,
+        }
+
+        console.log(JSON.stringify(body))
+
+        $.ajax({
+            url: "/api/member/login",
+            contentType: "application/json",
+            method: "POST",
+            data : JSON.stringify(body)
+        })
+            .done(function(response) {
+                if(response.login){
+                    location.href = "/home";
+                }else{
+                    alert('비밀번호가 일치하지 않습니다.');
+                }
+            });
+    }
+    const login_btn = document.querySelector('#login_btn');
+    login_btn.addEventListener('click',clickHandler);
+</script>
+</body>
+</html>
