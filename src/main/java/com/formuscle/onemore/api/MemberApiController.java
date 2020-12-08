@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 
@@ -36,6 +37,24 @@ public class MemberApiController {
         return new JoinMemberResponse(name,email);
     }
 
+    @PostMapping("/api/member/login")
+    public LoginMemberResponse member_login(@RequestBody @Valid LoginMemberRequest request,
+                                            HttpSession session) {
+
+        String email = request.email;
+        String psw = request.psw;
+
+        Member member = memberService.findOneByEmail(email);
+        boolean matches = passwordEncoder.matches(psw, member.getPassword());
+        LoginMemberResponse loginMemberResponse = new LoginMemberResponse(email, matches);
+
+        if(matches){
+            session.setAttribute("login",loginMemberResponse);
+        }
+
+        return loginMemberResponse;
+    }
+
     @Data
     @AllArgsConstructor
     static class JoinMemberResponse {
@@ -51,4 +70,19 @@ public class MemberApiController {
         private String psw;
         private String name;
     }
+
+    @Data
+    @AllArgsConstructor
+    static class LoginMemberResponse {
+        private String email;
+        private Boolean login;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class LoginMemberRequest {
+        private String email;
+        private String psw;
+    }
+
 }
