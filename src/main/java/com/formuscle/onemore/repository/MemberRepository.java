@@ -25,4 +25,10 @@ public class MemberRepository {
     public Member findOne(Long memberId) {
         return em.find(Member.class,memberId);
     }
+
+    public Member findOneByEmail(String email) {
+        return em.createQuery("select m from Member m where m.userMail=:email",Member.class)
+                .setParameter("email",email)
+                .getSingleResult();
+    }
 }
