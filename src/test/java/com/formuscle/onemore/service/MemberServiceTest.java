@@ -22,7 +22,7 @@ public class MemberServiceTest {
     @Autowired
     MemberRepository memberRepository;
     @Test
-    public void member_join_test() throws Exception {
+    public void 회원_추가() throws Exception {
         // Given
         Member member = new Member();
         member.setUsername("Sehyeong");
@@ -32,5 +32,24 @@ public class MemberServiceTest {
 
         // Then
         assertEquals(member,memberRepository.findOne(memberId));
+    }
+
+    @Test
+    public void 회원_이메일로_조회() throws Exception {
+        // Given
+
+        String username = "Sehyeong";
+        String userMail = "shseoul14@gmail.com";
+
+        Member member = new Member();
+
+        member.setUsername(username);
+        member.setUserMail(userMail);
+
+        // When
+        Long memberId = memberService.join(member);
+
+        // Then
+        assertEquals(member,memberRepository.findOneByEmail(userMail));
     }
 }

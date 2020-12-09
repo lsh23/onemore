@@ -25,4 +25,6 @@ public class MemberService {
 
     public Member findOne(Long memberId) {return memberRepository.findOne(memberId);}
 
+    public Member findOneByEmail(String email) {return memberRepository.findOneByEmail(email);}
+
 }
