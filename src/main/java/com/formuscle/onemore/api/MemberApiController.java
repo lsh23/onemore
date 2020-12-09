@@ -22,7 +22,7 @@ public class MemberApiController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/api/member/new")
-    public JoinMemberResponse member_join(@RequestBody @Valid JoinMemberRequest request) {
+    public JoinMemberResponse memberJoin(@RequestBody @Valid JoinMemberRequest request) {
 
         Member member = new Member();
         String name = request.name;
@@ -38,7 +38,7 @@ public class MemberApiController {
     }
 
     @PostMapping("/api/member/login")
-    public LoginMemberResponse member_login(@RequestBody @Valid LoginMemberRequest request,
+    public LoginMemberResponse memberLogin(@RequestBody @Valid LoginMemberRequest request,
                                             HttpSession session) {
 
         String email = request.email;
