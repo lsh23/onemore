@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,6 +56,17 @@ public class MemberApiController {
         return loginMemberResponse;
     }
 
+    @DeleteMapping("/api/member")
+    public LogOutResponse memberLogOut(HttpSession session) {
+
+        if(session.getAttribute("login") != null){
+            session.removeAttribute("login");
+            return new LogOutResponse(true);
+        }
+
+        return new LogOutResponse(false);
+    }
+
     @Data
     @AllArgsConstructor
     static class JoinMemberResponse {
@@ -85,4 +97,9 @@ public class MemberApiController {
         private String psw;
     }
 
+    @Data
+    @AllArgsConstructor
+    static class LogOutResponse {
+        private Boolean result;
+    }
 }
