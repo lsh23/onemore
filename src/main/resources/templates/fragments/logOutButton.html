@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="logOutButton" th:fragment="logOutButton">
+    <button class="btn-danger" id="logOut" onclick="logOutHandler()">로그아웃</button>
+    <script>
+        function logOutHandler(e){
+
+            $.ajax({
+                url: "/api/member",
+                contentType: "application/json",
+                method: "Delete",
+            })
+                .done(function(response) {
+                    if(response.result){
+                        alert('로그아웃 됐습니다.');
+                        location.href = "/home";
+                    }else{
+                        alert('다시 시도해주세요');
+                    }
+                });
+        }
+    </script>
+</div>
